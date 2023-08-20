@@ -2,17 +2,17 @@ from django.shortcuts import render
 
 
 def pet_create(request):
-    pass
+    return render(request, 'pets/pet-add-page.html')
 
 
-def pet_details(request):
-    pass
+def pet_details(request, username, pet_name):
+    return render(request, 'pets/pet-details-page.html')
 
 
-def pet_edit(request):
-    pass
+def pet_edit(request, username, pet_name):
+    return render(request, 'pets/pet-edit-page.html')
 
 
-def pet_delete(request):
-    pass
+def pet_delete(request, username, pet_name):
+    return render(request, 'pets/pet-delete-page.html')
 
