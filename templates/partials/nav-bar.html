@@ -47,7 +47,16 @@
 
                     <!-- Link to Profile Page -->
                     <a href="{% url 'user details' pk=1 %}">
-                        <i>Profile</i>
+                        {% if request.user.is_authenticated %}
+                            <i>{{ request.user }}</i>
+                        {% else %}
+                            <i>Profile</i>
+                        {% endif %}
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'user logout' %}">
+                        <i>Logout</i>
                     </a>
                 </li>
             </ul>

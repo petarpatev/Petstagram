@@ -1,5 +1,7 @@
 from pathlib import Path
 
+from django.urls import reverse_lazy
+
 BASE_DIR = Path(__file__).resolve().parent.parent
 
 SECRET_KEY = 'django-insecure-e$55m2y(*pp-5%zv3b^&k^4=3zl^jve&6gpw84bs2n#hs%@syo'
@@ -78,6 +80,9 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+if DEBUG:
+    AUTH_PASSWORD_VALIDATORS = []
+
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'UTC'
@@ -92,3 +97,9 @@ STATICFILES_DIRS = (
 )
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+AUTH_USER_MODEL = 'accounts.PetstagramUser'
+
+LOGIN_REDIRECT_URL = reverse_lazy('index')
+
+LOGOUT_REDIRECT_URL = reverse_lazy('user login')
