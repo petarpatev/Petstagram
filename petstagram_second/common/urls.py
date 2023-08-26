@@ -1,7 +1,8 @@
 from django.urls import path
 
-from petstagram_second.common.views import index
+from petstagram_second.common.views import index, like_functionality
 
 urlpatterns = (
     path('', index, name='index'),
+    path('like/<int:photo_pk>/', like_functionality, name='like'),
 )
