@@ -1,4 +1,5 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, resolve_url
+from pyperclip import copy
 
 from petstagram_second.common.models import Like
 from petstagram_second.photos.models import Photo
@@ -21,5 +22,11 @@ def like_functionality(request, photo_pk):
     else:
         like = Like.objects.create(to_photo=photo, user=request.user)
         like.save()
+
+    return redirect(request.META['HTTP_REFERER'] + f'#{photo_pk}')
+
+
+def share_functionality(request, photo_pk):
+    copy(request.META['HTTP_HOST'] + resolve_url('photo details', photo_pk))
 
     return redirect(request.META['HTTP_REFERER'] + f'#{photo_pk}')
