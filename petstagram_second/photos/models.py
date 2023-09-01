@@ -18,7 +18,8 @@ class Photo(models.Model):
         blank=False,
         validators=(
             image_max_size_validator,
-        )
+        ),
+        upload_to='images',
     )
 
     description = models.TextField(
@@ -51,3 +52,6 @@ class Photo(models.Model):
         to=UserModel,
         on_delete=models.CASCADE,
     )
+
+    class Meta:
+        ordering = ('-date_of_publication',)
