@@ -6,24 +6,24 @@
         <div class="top">
             <div class="userDetails">
                 <!-- Link to User Profile Page -->
-                <a href="#">
+                <a href="{% url 'user details' pk=photo_post.user.pk %}">
                     <div class="profilepic">
                         <div class="profile_img">
                             <div class="image">
-                                <img src="/staticfiles/images/person.png" alt="img8">
+                                {% if photo_post.user.profile_picture %}
+                                    <img src="{{ photo_post.user.profile_picture }}">
+                                {% else %}
+                                    <img src="{% static 'images/person.png' %}" alt="img8">
+                                {% endif %}
                             </div>
                         </div>
                     </div>
                 </a>
                 <h3>
                     <!-- Link to User Profile Page -->
-                    <a href="#">
+                    <a href="{% url 'user details' pk=photo_post.user.pk %}">
                         <!-- if user has first name and last name -->
-                        {% if photo_post.user.first_name and photo_post.user.last_name %}
-                            {{ photo_post.user.first_name }} {{ photo_post.user.last_name }}
-                        {% else %}
-                            {{ photo_post.user.username }}
-                        {% endif %}
+                        {{ photo_post.user.get_name }}
                         <!-- else -->
                         <!-- show user username -->
                     </a>
@@ -51,7 +51,7 @@
                     <span class="heart">
 									<a href="{% url 'like' photo_pk=photo_post.pk %}">
 										<!-- if user has liked the photo -->
-                                        {% if photo_post.like_set.all %}
+                                        {% if photo_post.pk in all_photos_liked_by_current_user %}
                                             <svg style="color: red"
                                                  xmlns="http://www.w3.org/2000/svg"
                                                  width="24"

@@ -27,8 +27,8 @@ class PetstagramUser(auth_models.AbstractUser):
     NAME_MIN_LENGTH = 2
 
     first_name = models.CharField(
-        null=False,
-        blank=False,
+        null=True,
+        blank=True,
         max_length=NAME_MAX_LENGTH,
         validators=(
             MinLengthValidator(NAME_MIN_LENGTH),
@@ -37,8 +37,8 @@ class PetstagramUser(auth_models.AbstractUser):
     )
 
     last_name = models.CharField(
-        null=False,
-        blank=False,
+        null=True,
+        blank=True,
         max_length=NAME_MAX_LENGTH,
         validators=(
             MinLengthValidator(NAME_MIN_LENGTH),
@@ -61,3 +61,11 @@ class PetstagramUser(auth_models.AbstractUser):
         choices=GendersTypes.choices(),
         max_length=GendersTypes.max_len_genders(),
     )
+
+    def get_name(self):
+        if self.first_name and self.last_name:
+            return f"{self.first_name} {self.last_name}"
+        elif self.first_name or self.last_name:
+            return self.first_name or self.last_name
+        else:
+            return self.username

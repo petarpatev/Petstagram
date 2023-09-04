@@ -14,6 +14,7 @@ def pet_create(request):
             pet = form.save(commit=False)
             pet.user = request.user
             form.save()
+            # form._save_m2m()
             return redirect('user details', pk=request.user.pk)
 
     context = {

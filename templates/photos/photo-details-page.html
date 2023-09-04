@@ -14,11 +14,15 @@
                     <div class="userDetails">
 
                         <!-- Link to User Profile Details Page-->
-                        <a href="#">
+                        <a href="{% url 'user details' pk=photo.user.pk %}">
                             <div class="profilepic">
                                 <div class="profile_img">
                                     <div class="image">
-                                        <img src="{% static 'images/person.png' %}" alt="img8">
+                                        {% if photo.user.profile_picture %}
+                                            <img src="{{ photo.user.profile_picture }}">
+                                        {% else %}
+                                            <img src="{% static 'images/person.png' %}" alt="img8">
+                                        {% endif %}
                                     </div>
                                 </div>
                             </div>
@@ -26,12 +30,8 @@
                         <h3>
 
                             <!-- Link to User Profile Details Page -->
-                            <a href="#">
-                                {% if photo.user.first_name and photo.user.last_name %}
-                                    {{ photo.user.first_name }} {{ photo.user.last_name }}
-                                {% else %}
-                                    {{ photo.user.username }}
-                                {% endif %}
+                            <a href="{% url 'user details' pk=photo.user.pk %}">
+                                {{ photo.user.get_name }}
                             </a>
                             <br>
                             {% if photo.location %}
@@ -39,21 +39,24 @@
                                 <span>{{ photo.location }}</span>
                             {% endif %}
                             <!-- IF the viewer is the creator of the photo -->
-                            <div class="edit-delete-btns">
+                            {% if photo.user == request.user %}
+                                <div class="edit-delete-btns">
 
-                                <!-- Link to Edit Pet Photo Page -->
-                                <a href="{% url 'photo edit' pk=photo.pk %}">
-                                    <img class="edit-img" src="{% static 'images/edit-pen-icon-6.jpg' %}"
-                                         alt="edit button">
-                                </a>
+                                    <!-- Link to Edit Pet Photo Page -->
+                                    <a href="{% url 'photo edit' pk=photo.pk %}">
+                                        <img class="edit-img" src="{% static 'images/edit-pen-icon-6.jpg' %}"
+                                             alt="edit button">
+                                    </a>
 
-                                <!-- Link to Delete Pet Photo Page -->
-                                <a href="{% url 'photo delete' pk=photo.pk %}">
-                                    <img class="bin-img" src="{% static 'images/icon-remove-22.jpg' %}"
-                                         alt="bin button">
-                                </a>
-                            </div>
+                                    <!-- Link to Delete Pet Photo Page -->
+                                    <a href="{% url 'photo delete' pk=photo.pk %}">
+                                        <img class="bin-img" src="{% static 'images/icon-remove-22.jpg' %}"
+                                             alt="bin button">
+                                    </a>
+                                </div>
+                            {% endif %}
                             <!-- End IF the viewer is the creator of the photo -->
+
 
                         </h3>
                     </div>
@@ -80,7 +83,7 @@
                                     <!-- Link to Like Path -->
 									<a href="{% url 'like' photo_pk=photo.pk %}">
 
-                                        {% if all_photo_likes %}
+                                        {% if is_photo_liked_by_user %}
                                             <!-- IF user has liked the photo -->
                                             <svg style="color: red"
                                                  xmlns="http://www.w3.org/2000/svg"
@@ -176,19 +179,18 @@
                                             <div class="profile_img">
                                                 <div class="image">
                                                     <!-- User Profile Image -->
-                                                    <img src="{% static 'images/person.png' %}" alt="img8">
+                                                    {% if photo.user.profile_picture %}
+                                                        <img src="{{ photo.user.profile_picture }}">
+                                                    {% else %}
+                                                        <img src="{% static 'images/person.png' %}" alt="img8">
+                                                    {% endif %}
                                                 </div>
                                             </div>
                                         </div>
                                         <p>
                                             <!-- Link to User Profile Details Page-->
                                             <!-- User First and/or Last Name or username-->
-                                            {% if comment.user.first_name and comment.user.last_name %}
-                                                <a href="{% url 'user details' pk=comment.user_id %}">{{ comment.user.first_name }} {{ comment.user.last_name }}</a>
-                                            {% else %}
-                                                <a href="{% url 'user details' pk=comment.user_id %}">{{ comment.user.username }}</a>
-
-                                            {% endif %}
+                                            <a href="{% url 'user details' pk=comment.user.pk %}">{{ comment.user.get_name }}</a>
                                             <!-- User Comment -->
                                             {{ comment.comment_text }}
                                         </p>
@@ -213,9 +215,9 @@
                     <form method="post" action="{% url 'add comment' photo_pk=photo.pk %}">
                         {{ comment_form }}
                         {% csrf_token %}
-{#                        <label for="id_body">Body:</label>#}
-{#                        <textarea name="body" cols="40" rows="10" placeholder="Add comment..." maxlength="300"#}
-{#                                  required="" id="id_body"></textarea>#}
+                        {#                        <label for="id_body">Body:</label>#}
+                        {#                        <textarea name="body" cols="40" rows="10" placeholder="Add comment..." maxlength="300"#}
+                        {#                                  required="" id="id_body"></textarea>#}
                         <!-- Post Comments Button -->
                         <button type="submit">Post</button>
                     </form>

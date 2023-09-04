@@ -14,6 +14,7 @@ def photo_create(request):
             photo = form.save(commit=False)
             photo.user = request.user
             form.save()
+            # form._save_m2m()
             return redirect('index')
 
     context = {
@@ -26,6 +27,7 @@ def photo_create(request):
 def photo_details(request, pk):
     photo = Photo.objects.filter(pk=pk).get()
     all_photo_likes = photo.like_set.all()
+    is_photo_liked_by_user = all_photo_likes.filter(user=request.user)
     comment_form = CommentForm()
     all_photo_comments = photo.comment_set.all()
     context = {
@@ -33,6 +35,7 @@ def photo_details(request, pk):
         'comment_form': comment_form,
         'all_photo_likes': all_photo_likes,
         'all_photo_comments': all_photo_comments,
+        'is_photo_liked_by_user': is_photo_liked_by_user,
     }
     return render(request, 'photos/photo-details-page.html', context)
 

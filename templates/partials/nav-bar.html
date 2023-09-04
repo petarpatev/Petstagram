@@ -29,36 +29,35 @@
                         <i>Add Photo</i>
                     </a>
                 </li>
-                <li class="nav-item">
+                {% if request.user.is_authenticated %}
+                    <li class="nav-item">
 
-                    <!-- Link to Add Pet Page -->
-                    <a href="{% url 'user login' %}">
-                        <i>Login</i>
-                    </a>
-                </li>
-                <li class="nav-item">
+                        <!-- Link to Profile Page -->
+                        <a href="{% url 'user details' pk=request.user.pk %}">
+                            <i>{{ request.user.username }}</i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
 
-                    <!-- Link to Add Pet Page -->
-                    <a href="{% url 'user register' %}">
-                        <i>Register</i>
-                    </a>
-                </li>
-                <li class="nav-item">
+                        <a href="{% url 'user logout' %}">
+                            <i>Logout</i>
+                        </a>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
 
-                    <!-- Link to Profile Page -->
-                    <a href="{% url 'user details' pk=1 %}">
-                        {% if request.user.is_authenticated %}
-                            <i>{{ request.user }}</i>
-                        {% else %}
-                            <i>Profile</i>
-                        {% endif %}
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <a href="{% url 'user logout' %}">
-                        <i>Logout</i>
-                    </a>
-                </li>
+                        <a href="{% url 'user login' %}">
+                            <i>Login</i>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+
+                        <!-- Link to Add Pet Page -->
+                        <a href="{% url 'user register' %}">
+                            <i>Register</i>
+                        </a>
+                    </li>
+                {% endif %}
             </ul>
         </div>
     </div>

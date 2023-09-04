@@ -10,6 +10,8 @@ def index(request):
     all_photo_posts = Photo.objects.all()
     comment_form = CommentForm()
     search_form = SearchForm()
+    current_user = request.user
+    all_photos_liked_by_current_user = [like.to_photo_id for like in current_user.like_set.all()]
 
     if request.method == 'POST':
         search_form = SearchForm(request.POST)
@@ -20,6 +22,7 @@ def index(request):
         'all_photo_posts': all_photo_posts,
         'comment_form': comment_form,
         'search_form': search_form,
+        'all_photos_liked_by_current_user': all_photos_liked_by_current_user,
     }
 
     return render(request, 'common/home-page.html', context)
