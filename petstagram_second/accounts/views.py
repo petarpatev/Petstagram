@@ -31,7 +31,19 @@ class LogoutUserView(auth_views.LogoutView):
 
 
 def user_details(request, pk):
-    return render(request, 'accounts/profile-details-page.html')
+    user = UserModel.objects.filter(pk=pk).get()
+    is_owner = user == request.user
+    user_all_photos = user.photo_set.all()
+    user_all_pets = user.pet_set.all()
+    user_all_likes = sum([photo.like_set.count() for photo in user_all_photos])
+    context = {
+        'user': user,
+        'is_owner': is_owner,
+        'user_all_photos': user_all_photos,
+        'user_all_pets': user_all_pets,
+        'user_all_likes': user_all_likes,
+    }
+    return render(request, 'accounts/profile-details-page.html', context)
 
 
 def user_edit(request, pk):
@@ -53,4 +65,11 @@ def user_edit(request, pk):
 
 
 def user_delete(request, pk):
-    return render(request, 'accounts/profile-delete-page.html')
+    user = UserModel.objects.filter(pk=pk).get()
+    if request.method == 'POST':
+        user.delete()
+        return redirect('user login')
+    context = {
+        'user': user,
+    }
+    return render(request, 'accounts/profile-delete-page.html', context)

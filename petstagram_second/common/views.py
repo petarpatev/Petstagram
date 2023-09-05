@@ -1,3 +1,4 @@
+from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, resolve_url
 from pyperclip import copy
 
@@ -28,6 +29,7 @@ def index(request):
     return render(request, 'common/home-page.html', context)
 
 
+@login_required
 def like_functionality(request, photo_pk):
     photo = Photo.objects.filter(pk=photo_pk).get()
     like_obj = Like.objects.filter(to_photo_id=photo_pk, user_id=request.user.pk).first()
@@ -47,6 +49,7 @@ def share_functionality(request, photo_pk):
     return redirect(request.META['HTTP_REFERER'] + f'#{photo_pk}')
 
 
+@login_required
 def add_comment(request, photo_pk):
     photo = Photo.objects.filter(pk=photo_pk).get()
     if request.method == 'POST':
